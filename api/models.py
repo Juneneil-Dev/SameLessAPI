@@ -26,6 +26,7 @@ class Register(models.Model):
     name = models.CharField(max_length=30, null=False)
     nickname = models.CharField(max_length=30, null=False)
     email = models.EmailField(max_length=30, null=False)
+    created_at = models.DateTimeField(auto_now_add=True)
 
     @classmethod
     def register_user(cls, username, password):
@@ -212,15 +213,15 @@ class scam_site(models.Model):
         return self.title
 
 
-# class fraud_report(models.Model):
-#     id = models.AutoField(primary_key=True)
-#     number = models.CharField(max_length=100, null=True)
-#     title = models.CharField(max_length=100, null=True)
-#     date = models.CharField(max_length=100, null=True)
-#     check = models.CharField(max_length=100, null=True)
-#     created_at = models.DateTimeField(auto_now_add=True)
+class fraud_report(models.Model):
+    id = models.AutoField(primary_key=True)
+    number = models.CharField(max_length=100, null=True)
+    title = models.CharField(max_length=100, null=True)
+    date = models.CharField(max_length=100, null=True)
+    box_check = models.CharField(max_length=100, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
 
-#     def __str__(self):
-#         return self.title
+    def __str__(self):
+        return self.title
 
 

@@ -2,7 +2,7 @@ from django.urls import path
 from .views import DumpItAPI, RegisterAPI, SportNewsAPI, LabAnalysisAPI, FreeAnalysisAPI, VerificationCenterAPI
 from .views import Confirmed_API, ReportScamAPI, MaliciousReportAPI, ReportScammerAPI, NewPostAPI, PopularityAPI
 from .views import AdvertiseAPI, BannerAPI, ScamSiteAPI, SiteDbAPI, NotificationAPI, LoginAPI, HealthCheckView
-# from .views import ListUsers
+from .views import UserView, FraudReportAPI
 
 
 
@@ -16,6 +16,7 @@ urlpatterns = [
     path('health_check/', HealthCheckView.as_view()),
     # path('api/users/', ListUsers.as_view()),
     # path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('user/', UserView.as_view()),
 
     path('login/', LoginAPI.as_view(), name='login'),
     path('get_user_register/', RegisterAPI.as_view()),
@@ -115,10 +116,10 @@ urlpatterns = [
     path('scam_site/delete/<int:id>/', ScamSiteAPI.as_view()),
 
 
-    # path('fraud_report/get/', FraudReportAPI.as_view()),
-    # path('fraud_report/create/', FraudReportAPI.as_view()),
-    # path('fraud_report/put/<int:id>/', FraudReportAPI.as_view()),
-    # path('fraud_report/delete/<int:id>/', FraudReportAPI.as_view()),
+    path('fraud_report/get/', FraudReportAPI.as_view()),
+    path('fraud_report/create/', FraudReportAPI.as_view()),
+    path('fraud_report/put/<int:id>/', FraudReportAPI.as_view()),
+    path('fraud_report/delete/<int:id>/', FraudReportAPI.as_view()),
 
 
 ]

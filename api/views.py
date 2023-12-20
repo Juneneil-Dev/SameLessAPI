@@ -5,12 +5,12 @@ from rest_framework import status
 from rest_framework.views import APIView,Response
 from .models import Item, Register, sport_news, lab_analysis, free_analysis, verification_center, site_db, confirmed
 from .models import report_scam, malicious_report, report_scammer, new_post, popularity, notification, advertise
-from .models import banner, scam_site #, fraud_report
+from .models import banner, scam_site, fraud_report
 from .serializers import ItemSerializer, RegisterSerializer, LoginSerializer, SportNewsAPISerializer, LabAnalysisAPISerializer
 from .serializers import FreeAnalysisAPISerializer, VerificationCenterAPISerializer, SiteDbAPISerializer, Confirmed_APISerializer
 from .serializers import ReportScamAPISerializer, MaliciousReportAPISerializer, ReportScammerAPISerializer, NewPostAPISerializer
 from .serializers import PopularityAPISerializer, NotificationAPISerializer, AdvertiseAPISerializer
-from .serializers import ScamSiteAPISerializer , BannerAPISerializer
+from .serializers import ScamSiteAPISerializer , BannerAPISerializer, FraudReportSerializer
 
 
 
@@ -19,6 +19,65 @@ from django.db import connection
 from django.core.cache import cache
 import requests
 import os
+
+
+class UserView(APIView):
+    def get(self, request):
+        sport_news_data = sport_news.objects.all()
+        lab_analysis_data = lab_analysis.objects.all()
+        free_analysis_data = free_analysis.objects.all()
+        verification_center_data = verification_center.objects.all()
+        site_db_data = site_db.objects.all()
+        confirmed_data = confirmed.objects.all()
+        report_scam_data = report_scam.objects.all()
+        malicious_report_data = malicious_report.objects.all()
+        report_scammer_data = report_scammer.objects.all()
+        new_post_data = new_post.objects.all()
+        popularity_data = popularity.objects.all()
+        notification_data = notification.objects.all()
+        advertise_data = advertise.objects.all()
+        banner_data = banner.objects.all()
+        scam_site_data = scam_site.objects.all()
+        fraud_report_data = fraud_report.objects.all()
+
+        
+        sport_news_serializer = SportNewsAPISerializer(sport_news_data, many=True)
+        lab_analysis_serializer = LabAnalysisAPISerializer(lab_analysis_data, many=True)
+        free_analysis_serializer = FreeAnalysisAPISerializer(free_analysis_data, many=True)
+        verification_center_serializer = VerificationCenterAPISerializer(verification_center_data, many=True)
+        site_db_serializer = SiteDbAPISerializer(site_db_data, many=True)
+        confirmed_serializer = Confirmed_APISerializer(confirmed_data, many=True)
+        report_scam_serializer = ReportScamAPISerializer(report_scam_data, many=True)
+        malicious_report_serializer = MaliciousReportAPISerializer(malicious_report_data, many=True)
+        report_scammer_serializer = ReportScammerAPISerializer(report_scammer_data, many=True)
+        new_post_serializer = NewPostAPISerializer(new_post_data, many=True)
+        popularity_serializer = PopularityAPISerializer(popularity_data, many=True)
+        notification_serializer = NotificationAPISerializer(notification_data, many=True)
+        advertise_serializer = AdvertiseAPISerializer(advertise_data, many=True)
+        banner_serializer = BannerAPISerializer(banner_data, many=True)
+        scam_site_serializer = ScamSiteAPISerializer(scam_site_data, many=True)
+        fraud_report_serializer = FraudReportSerializer(fraud_report_data, many=True)
+
+        response_data = {
+            "sport_news": sport_news_serializer.data,
+            "lab_analysis": lab_analysis_serializer.data,
+            "free_analysis": free_analysis_serializer.data,
+            "verification_center": verification_center_serializer.data,
+            "site_db": site_db_serializer.data,
+            "confirmed": confirmed_serializer.data,
+            "report_scam": report_scam_serializer.data,
+            "malicious_report": malicious_report_serializer.data,
+            "report_scammer": report_scammer_serializer.data,
+            "new_post": new_post_serializer.data,
+            "popularity": popularity_serializer.data,
+            "notification": notification_serializer.data,
+            "advertise": advertise_serializer.data,
+            "banner": banner_serializer.data,
+            "scam_site": scam_site_serializer.data,
+            "fraud_report": fraud_report_serializer.data,
+        }
+
+        return Response(response_data)
 
 # from rest_framework import authentication, permissions
 # from django.contrib.auth.models import User
@@ -922,53 +981,53 @@ class ScamSiteAPI(APIView):
         response_data = {"response": "Item deleted"}
         return Response(response_data, status=status.HTTP_200_OK)
 
-# class FraudReportAPI(APIView):
-#     def get(self,request):
-#         items = fraud_report.objects.all()
-#         items_data = FraudReportSerializer(items,many=True).data
-#         response_data = {"datas": items_data}
-#         return Response(response_data,status=status.HTTP_200_OK)
+class FraudReportAPI(APIView):
+    def get(self,request):
+        items = fraud_report.objects.all()
+        items_data = FraudReportSerializer(items,many=True).data
+        response_data = {"datas": items_data}
+        return Response(response_data,status=status.HTTP_200_OK)
 
-#     def post(self,request):
-#         number = request.data.get('number')
-#         title = request.data.get('title')
-#         date = request.data.get('date')
-#         check = request.data.get('check')
+    def post(self,request):
+        number = request.data.get('number')
+        title = request.data.get('title')
+        date = request.data.get('date')
+        box_check = request.data.get('box_check')
         
 
 
-#         fraud_report.objects.create(number=number,title=title,date=date,check=check)
-#         response_data = {"response":"item Created"}
-#         return Response(response_data,status=status.HTTP_200_OK)
+        fraud_report.objects.create(number=number,title=title,date=date,box_check=box_check)
+        response_data = {"response":"item Created"}
+        return Response(response_data,status=status.HTTP_200_OK)
 
-#     def put(self,request,id):
-#         number = request.data.get('number')
-#         title = request.data.get('title')
-#         date = request.data.get('date')
-#         check = request.data.get('check')
+    def put(self,request,id):
+        number = request.data.get('number')
+        title = request.data.get('title')
+        date = request.data.get('date')
+        box_check = request.data.get('box_check')
         
-#         item = fraud_report.objects.filter(id=id).first()
-#         if item is None:
-#             response_data = {"response":"Item does not exists"}
-#             return Response(response_data,status=status.HTTP_404_NOT_FOUND)
-#         item.number = number
-#         item.title = title
-#         item.date = date
-#         item.check = check
-#         item.save()
-#         response_data = {"response":"item Updated"}
-#         return Response(response_data,status=status.HTTP_200_OK)
+        item = fraud_report.objects.filter(id=id).first()
+        if item is None:
+            response_data = {"response":"Item does not exists"}
+            return Response(response_data,status=status.HTTP_404_NOT_FOUND)
+        item.number = number
+        item.title = title
+        item.date = date
+        item.box_check = box_check
+        item.save()
+        response_data = {"response":"item Updated"}
+        return Response(response_data,status=status.HTTP_200_OK)
 
-#     def delete(self, request, id):
-#         item = fraud_report.objects.filter(id=id).first()
+    def delete(self, request, id):
+        item = fraud_report.objects.filter(id=id).first()
         
-#         if item is None:
-#             response_data = {"response": "Item does not exist"}
-#             return Response(response_data, status=status.HTTP_404_NOT_FOUND)
+        if item is None:
+            response_data = {"response": "Item does not exist"}
+            return Response(response_data, status=status.HTTP_404_NOT_FOUND)
 
-#         item.delete()
-#         response_data = {"response": "Item deleted"}
-#         return Response(response_data, status=status.HTTP_200_OK)
+        item.delete()
+        response_data = {"response": "Item deleted"}
+        return Response(response_data, status=status.HTTP_200_OK)
 
 class HealthCheckView(APIView):
     def get(self, request):

@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from .models import Item, Register, sport_news, lab_analysis, free_analysis, verification_center, site_db, confirmed
 from .models import report_scam, malicious_report, report_scammer, new_post, popularity, notification, advertise
-from .models import banner, scam_site #, fraud_report
+from .models import banner, scam_site, fraud_report
 
 
 
@@ -132,10 +132,10 @@ class ScamSiteAPISerializer(serializers.ModelSerializer):
         fields = ['id', 'picture', 'title', 'description', 'created_at']
 
 
-# class FraudReportSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = fraud_report
-#         fields = ['id', 'number', 'title', 'date', 'check','created_at']
+class FraudReportSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = fraud_report
+        fields = ['id', 'number', 'title', 'date', 'box_check','created_at']
 
 
 
